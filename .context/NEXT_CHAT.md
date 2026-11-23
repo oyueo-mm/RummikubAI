@@ -1,4 +1,16 @@
-# RummikubAI — 새 채팅 인수인계 (2026-11-23 최신)
+# RummikubAI — 새 채팅 인수인계 (2026-11-24 최신)
+
+> **최신 PR #9 연구 변경을 먼저 확인한다.** 2026-11-23 문단은 과거 이력이며 이 섹션이 우선이다.
+
+## 2026-11-24 — 5계열 연구 작업
+
+- [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9)에 **Global Cover β, Belief UCT β, Belief PUCT β, Apprentice β** 4개 모델을 추가해 합계 **10개**. [연구별 구현 수준](RESEARCH_PHASES.md) 참조.
+- 전체 보드 물리 타일을 대상으로 하는 **노드 제한 전역 Cover**, 공개 정보만으로 상대 패/더미를 샘플링하는 **루트 UCT/PUCT**, 한 차례 UCT 교사 모방 **경량 정책 증류**. 완전 Global SOTA solver, 다층 ISMCTS, ExIt 반복 self-play는 아니다.
+- **관측에서 원본 seed를 제거**하여 같은 seed로 실제 상대 손패를 역산하지 못하도록 수정. 새로운 연구 행동은 실제 엔진의 합법성 검사 재통과.
+- policy 계수는 [CI 45228856235](https://github.com/oyueo-mm/RummikubAI/actions/runs/45228856235)의 독립 시드 학습/검증을 거쳐 업데이트. 16개 학습 게임/6개 홀드아웃 게임, 다중 행동 샘플 89/34개, 홀드아웃 교사 행동 일치율 64.7%. 승률 증명이 아님.
+- Deep CFR/ReBeL은 축소된 공개신념 payoff matrix와 regret matching만, MuZero는 단일 다음상태 대리 예측 모델만 구현. **완전 Deep CFR/ReBeL/MuZero는 미구현**.
+- Pages 배포는 research/*.js도 함께 복사하도록 workflow 수정. PR 병합 후 실제 Pages 성공 여부 확인 필수.
+- 초기 실험 12판에서 Global 8-4, Belief UCT v1(8 rollout) 1-11, Apprentice(학습 전 prior) 6-6, Belief PUCT(학습 전 prior) 8-4 vs Strategic+. **현재 UCT 24회/PUCT 20회·학습된 prior로 변경하여 해당 이전 수치와 버전을 구분해야 함.** 향후 독립 40판 실험 링크를 추가.
 
 > 다음 채팅에서는 이 문서를 먼저 읽고, 이후 `STATUS.md`, `BACKLOG.md`, `ROADMAP_2P_SOTA.md`, `AI_RESEARCH.md`, `DECISIONS.md`, `AGENTS.md`를 확인한다. 19:53 이전의 상태·체크리스트 서술과 충돌하면 **아래 검증 완료 상태**를 우선한다.
 

@@ -110,3 +110,13 @@
 - 같은 CI 러너에서 측정한 AI 평균 턴 계산시간: Strategic+ **10.90ms**, Strategic v1.1 **5.35ms**. 더 오래 생각한 Strategic+에 시간상 유리함이 있으므로 **동일 예산 승률 우위는 미검증**.
 - 기존 200판(127승73패)을 최신 독립 200판으로 대체해서는 안 된다. 이번 새 코드에서 재실행한 표본은 40판이다.
 - [PR #8](https://github.com/oyueo-mm/RummikubAI/pull/8)에서 계측, 비공개 관측 및 테스트를 도입했고 CI/Pages를 통과했다. 다음 목표는 동일 벽시계 제한 평가 후 솔버 및 belief/ISMCTS 성능 향상.
+
+
+## 2026-11-24 · 다섯 연구 계열 1차 구현 및 탐색적 실험
+
+- **실제 신규 모델 4종**: Global Cover β (global-cover), Belief UCT β (belief-uct), Belief PUCT β (belief-puct), Apprentice β (exit-apprentice). 전체 10종. [모델별 실제 구현 수준](RESEARCH_PHASES.md).
+- 실험용 진단: Deep CFR/ReBeL 계열의 공개 신념 루트 정상형 CFR 유사 regret matching, MuZero 계열 단일 learned-dynamics proxy. 이들은 **원 논문의 완전한 알고리즘이나 실전 등록 모델이 아니다.**
+- [CI 45228856235](https://github.com/oyueo-mm/RummikubAI/actions/runs/45228856235): 별도 paired 12판(6시드쌍)에서 Global Cover 8승4패, Belief UCT(8회 탐색) 1승11패, Apprentice(초기 prior) 6승6패, Belief PUCT(초기 prior) 8승4패, 모두 Strategic+ 상대. **표본 작음·시간 예산 미통제·학습 prior 업데이트 전 수치.**
+- 같은 CI에서 UCT(14회) 교사 단일 증류 학습 시드 51000~51015, 완전 분리 홀드아웃 151000~151005. 행동 후보 2개 이상인 학습 89개·평가 34개. 학습 top-1 정확도 75.3%, 홀드아웃 top-1 정확도 **64.7%**. 이는 승률이 아니라 **교사 행동 모방 정확도**다.
+- 학습된 선형 prior를 연구 모델에 반영하고 UCT 24회·PUCT 20회로 확장. 새 버전은 독립 시드에서 다시 대국 평가할 것. 이전 12판 수치는 새 버전의 승률로 사용할 수 없다.
+- 원본 게임 seed를 playerObservation에서 제거해 전체 숨은 손패 역산을 방지했고, belief 후보·다른 모델의 수를 엔진 규칙으로 재검증한다. 페이지 정적 배포에 research/*.js 추가 포함.
