@@ -8,7 +8,7 @@
 | --- | --- | --- |
 | Global Cover β (global-cover) | 모든 공개 보드의 타일을 필수로 두는 전역 후보 Exact Cover + 제한적 B&B, 후보 최대 12,000·노드 1,400·38 타일 | 노드 상한에 걸리면 전역 최적성 불명. 큰 보드는 Strategic+ 폴백. K-best/ILP/CP-SAT 없음 |
 | Belief UCT β (belief-uct) | 106개 타일 보존 기반 상대 손패/더미 샘플 + 공유 루트 UCT 8회·상대 Greedy 1턴 rollout | 다층 ISMCTS/POMCP 아님 |
-| Belief PUCT β (belief-puct) | 공유 루트 PUCT 12회, 정책 prior와 belief rollout | 신경망 가치망/다층 PUCT 미구현. prior 초기에는 수동값이며 학습 완료 후 별도 기록 |
+| Belief PUCT β (belief-puct) | 공유 루트 PUCT 12회, 정책 prior와 belief rollout | 신경망 가치망/다층 PUCT 미구현. prior는 16개 학습 게임/6개 홀드아웃 게임에서 UCT 교사 행동 모방으로 학습한 선형 계수를 사용 (CI 45228856235; 평가 정확도 64.7%) |
 | Apprentice β (exit-apprentice) | Belief UCT를 교사로 모방하는 경량 선형 softmax 정책 학습·홀드아웃 평가 | ExIt 단일 증류 부트스트랩. 반복 self-play, 신경망 policy/value 미구현 |
 
 ## Deep CFR · ReBeL · MuZero 실험 도구 (실전 AI 아님)
