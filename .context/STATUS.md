@@ -2,8 +2,8 @@
 
 - 저장소: https://github.com/oyueo-mm/RummikubAI
 - 배포: https://oyueo-mm.github.io/RummikubAI/
-- 작업 브랜치: `feat/v06-home-structured-hold-strategy`
-- **현재 문서 작성 시점: 2026-11-23, CI/배포 확인 전**
+- 검증 PR: https://github.com/oyueo-mm/RummikubAI/pull/5
+- **검증 시점: 2026-11-23, PR CI 성공(57 tests), main 병합/Pages 최종 배포 확인 전**
 
 ## 현재 코드 범위
 
@@ -21,11 +21,11 @@
 
 - 실제 모바일·데스크톱의 시각적/드래그 검증 필요
 - 온라인 멀티플레이, 계정·매칭·실시간 동기화 없음
-- 탐색 AI의 정확 재배열은 손패+테이블 합계 **최대 15개**일 때만 동작. 더 큰 보드에선 Greedy 기반
+- 국소 Exact Cover는 최대 **16개 후보 문제**, 부분집합당 **15개 타일**까지만 탐색. 전역 최적 솔버는 아님
 - 정보집합 MCTS·상대 손패 추론·정책 학습 미구현
 - 일부 조커 회수/변형 규칙과 3~4인 대전 미구현
 - 장시간 독립 시드 벤치마크와 신뢰구간 분석 필요
 
 ## 검증
 
-추가/수정된 단위 테스트는 `tests/`에 위치. `npm test`, GitHub CI, Pages 배포 모두 성공했는지 해당 PR에서 기록을 확인할 것. **검증 전 완료라고 주장하지 않음.**
+단위 테스트는 `tests/`에 위치. 2026-11-23 PR CI에서 **57/57 통과** 및 파일 의존성 검사 성공. 전략 AI의 40+120판 재현 결과는 `AI_RESEARCH.md` 참조. GitHub Pages 배포는 `main` 병합 이후 별도 확인.
