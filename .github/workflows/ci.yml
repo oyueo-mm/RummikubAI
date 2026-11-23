@@ -16,5 +16,5 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
-      - run: node --check app.js && node --check draft.js && node --check hold.js && node --check engine.js
+      - run: node --check app.js && node --check draft.js && node --check hold.js && node --check sound.js && node --check engine.js
       - run: node scripts/check-site.mjs .
