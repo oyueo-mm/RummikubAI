@@ -3,7 +3,7 @@
 - 저장소: https://github.com/oyueo-mm/RummikubAI
 - 배포: https://oyueo-mm.github.io/RummikubAI/
 - 진행 PR: https://github.com/oyueo-mm/RummikubAI/pull/6
-- **기록 시점: 2026-11-23, v0.7 PR 검증 중 (main 병합·Pages 배포 전)**
+- **기록 시점: 2026-11-23, v0.7 PR CI 테스트 75개 통과, main 병합·Pages 배포 전**
 
 ## 현재 코드 범위
 
@@ -30,4 +30,4 @@
 
 ## 검증
 
-단위 테스트는 `tests/`에 위치. v0.6에서는 57/57 테스트 및 파일 의존성 검사를 통과했다. v0.7 새 테스트·대국·배포 결과는 **PR #6 완료 이후** 갱신한다. 이전 전략 AI의 40+120판 결과는 `AI_RESEARCH.md` 참조.
+단위 테스트는 `tests/`에 위치. v0.6에서는 57/57 테스트 및 파일 의존성 검사를 통과했다. v0.7 PR CI에서 **75/75 테스트 통과**, 정적 의존성 **10개 파일 검증**, 200판 Strategic+ vs Strategic v1.1 **127승/73패** 관측. 장시간 결과는 `AI_RESEARCH.md`, 배포 여부는 GitHub Pages 워크플로 기록 참조. 이전 전략 AI의 40+120판 결과는 `AI_RESEARCH.md` 참조.
