@@ -102,3 +102,11 @@
 - `playerObservation(g,p)`가 자기 손패, 공개 보드, 공개 장수·차례 정보만 불변 복제해 돌려준다. 현재 정책의 후보 탐색 입력을 관측 기반으로 전환하되 게임 상태 갱신은 엔진에서 처리한다.
 - 벤치마크 결과에 `pairs[]`(각 시드의 선후공 결과), `pairedBootstrap95`(2000회 복원추출), `avgDecisionMsA/B`, `equalTimeBudget:false`를 추가한다.
 - 이 업데이트는 기존 모델의 SOTA급 성능이나 동일 시간 공정 비교를 입증하지 않는다. 다음 연구 게이트: 엄격한 동일 시간 예산 및 외부 공식 룰 오라클 검증.
+
+## 2026-11-23 · 새 계측 결과(대국 40판 재검증)
+
+- [CI 로그](https://github.com/oyueo-mm/RummikubAI/actions/runs/45163338241)에서 Strategic+ vs Strategic v1.1, seed 10000~10019, 선후공 교환 40판: **24승 16패, A 점수율 60.0%**.
+- 시드 쌍 20개, bootstrap 2,000회 95% 점수율 구간 **[47.5%, 72.5%]**. 구간은 50%를 포함하며 표본도 작다.
+- 같은 CI 러너에서 측정한 AI 평균 턴 계산시간: Strategic+ **10.90ms**, Strategic v1.1 **5.35ms**. 더 오래 생각한 Strategic+에 시간상 유리함이 있으므로 **동일 예산 승률 우위는 미검증**.
+- 기존 200판(127승73패)을 최신 독립 200판으로 대체해서는 안 된다. 이번 새 코드에서 재실행한 표본은 40판이다.
+- [PR #8](https://github.com/oyueo-mm/RummikubAI/pull/8)에서 계측, 비공개 관측 및 테스트를 도입했고 CI/Pages를 통과했다. 다음 목표는 동일 벽시계 제한 평가 후 솔버 및 belief/ISMCTS 성능 향상.

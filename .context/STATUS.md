@@ -1,70 +1,33 @@
-# RummikubAI — 현재 상태 (2026-11-23 19:53 KST 인수인계)
+# RummikubAI — 최신 구현·연구 상태 (2026-11-23)
 
-> 이 문서는 **현재 코드로 확인된 기능**과 **아직 구현하지 않은 사용자 요청**을 분리한다. 이전 버전 문서의 'PR #6 배포 전' 기록은 오래된 내용이다. 최신 인수인계: [NEXT_CHAT.md](NEXT_CHAT.md), 실천 체크리스트: [BACKLOG.md](BACKLOG.md).
+## 최신 완료·배포 증거
 
-## 저장소와 배포
+- `main`에 [PR #7](https://github.com/oyueo-mm/RummikubAI/pull/7) UI 안정화 및 관전 기록 병합(`65bea462`), [CI](https://github.com/oyueo-mm/RummikubAI/actions/runs/45162575812) 성공, [Pages](https://github.com/oyueo-mm/RummikubAI/actions/runs/45162819788) 성공.
+- `main`에 [PR #8](https://github.com/oyueo-mm/RummikubAI/pull/8) PlayerObservation·paired bootstrap·시간계측 병합(`1a954bec`), [CI](https://github.com/oyueo-mm/RummikubAI/actions/runs/45163338241) 성공, [Pages](https://github.com/oyueo-mm/RummikubAI/actions/runs/45163717983) 성공.
+- 웹: https://oyueo-mm.github.io/RummikubAI/
 
-- GitHub: https://github.com/oyueo-mm/RummikubAI (`main`)
-- GitHub Pages: https://oyueo-mm.github.io/RummikubAI/
-- 기능 PR #6: https://github.com/oyueo-mm/RummikubAI/pull/6 — **2026-11-23 병합 완료**, 병합 커밋 `7f62e8c5`.
-- 이후 계획 문서 커밋 `91ba7d39`까지 CI 및 Pages **성공 확인**: [CI](https://github.com/oyueo-mm/RummikubAI/actions/runs/45159929165) · [Pages](https://github.com/oyueo-mm/RummikubAI/actions/runs/45159929796).
-- **이번 인수인계 문서 변경을 포함한 최신 커밋의 CI/Pages는 새 채팅에서 다시 확인할 것.** 단순 문서 저장과 게임 기능 구현/시각 검증은 서로 다르다.
+## 이미 구현됨 (코드·Node 테스트)
 
-## 최우선 목표
+- 표준 106개 타일·14개 시작·첫 등록 30점 기반 엔진, 인간 대 AI·같은 기기 인간 2인전, 6개 AI 모델, 랜덤 시드·대국 관전·턴 이동·타일 ID 이벤트, 비교 모드.
+- AI 관전 부분 DOM 갱신, 양쪽 손패 기본 공개, 물리 ID별 FLIP 이동 애니메이션 초안; 사람이 뽑은 패 끝 누적 및 명시적 정렬. 정적 및 Node CI 확인 완료.
+- `playerObservation(g,p)` 불변 복제·비공개 opponent rack/bag 순서 제외 및 전략 후보 생성 연결. paired seed Bootstrap CI 95%, 모델별 턴 계산시간 측정.
+- 자동 CI: Node 테스트, 벤치 대국, 구문 및 사이트 정합성 확인. **실제 브라우저 E2E는 미실시.**
 
-**표준 2인전 루미큐브에서 실제 승률이 가장 높은 AI를 개발하고, 공정·재현 가능한 실험으로 SOTA급 성능을 입증하는 것.** 전체 게임의 승률 최적화는 단일 턴 타일 최다 배치와 다르다.
+## 미완료·검증 전 (완료 주장 금지)
 
-## 현재 코드에 존재하는 기능
+1. 실브라우저 E2E: 펼쳐진 select와 포커스/스크롤, 재생·일시정지·seek 조합, 모바일 조작, 실제 FLIP 및 소리 타이밍.
+2. AI 각 행동 선택·집기·운반·놓기 및 보드 전체 재배열의 단계별 자연스러운 애니메이션.
+3. 공식 조커 교체/회수, 더미 고갈과 승패/무승부 등 클래식 룰 판본별 오라클·속성 검증.
+4. 순수 합법 행동 API 및 FullState/PlayerObservation 런타임 구조적 완전 분리.
+5. 모든 AI에 엄격한 동일 CPU 시간·메모리 제한 부여, 독립 시험 시드 리그.
+6. Global Exact Solver 상위 K, Belief/ISMCTS/POMCP, ExIt/PUCT, Deep CFR/ReBeL/MuZero.
 
-- 규칙 엔진: 106개 물리 타일(조커 2개), 최초 14장, 그룹/런 검사, 첫 등록 30점, 뽑기/턴 전환/끝내기, 타일 보존 검증(모든 공식 변형 규칙 완성은 아님).
-- 웹 홈: AI와 플레이, 사람과 플레이(같은 기기 2인), AI 대국 관전. 두 사람은 턴 전환 화면을 거치고 AI/사람 플레이에서는 상대 패 비공개.
-- 플레이: 단색 테이블·하단 랙·좌우 플레이어/행동 버튼, 롱프레스의 오른쪽 연속 유효 타일 묶기, 기존 조합으로 타일 추가 시 유효 완성 조합 정렬, 드래그, Undo/Redo, 힌트, 사운드.
-- AI 관전: 2개 모델 선택, 재생/일시정지, 한 턴 진행, 배속, seed 재생, 손패 표시 토글, 턴 기록·승자 표시는 이미 존재. **하지만 실제 이동 애니메이션과 안정된 부분 렌더링은 아직 없음.**
-- AI 6종: `random`, `greedy`, `joker-safe`, `exact`, `strategic`, `strategic-plus` (`engine.js`). Strategic+는 국소 Exact 탐색 후보를 48개까지, Strategic v1.1은 16개까지 검토.
-- AI 비교: 선택 모델 쌍과 seed·대국 수, 자리 교환 결과. 재현 스크립트 `bench/matchup.mjs`; 수동 Actions `.github/workflows/research.yml`.
+## 관측한 성능 (AI 실력 상승 검증 아님)
 
-## 미해결 P0 (사용자가 이미 수정 요청한 항목)
+- 40판 Strategic+ vs Strategic: 24승16패, paired Bootstrap [47.5%,72.5%], 60.0%. 턴 평균 10.90ms vs 5.35ms.
+- 이전 독립 200판: Strategic+ vs Strategic 127승73패(63.5%). 동일 계산시간은 아님.
+- **외부 2인전 루미큐브 공식 SOTA 기준 미확인.** 세계 최고/이론적 최강 주장 금지.
 
-1. **AI 관전 스크롤·드롭다운 리셋**: `app.js: watchNext()`에서 행동마다 `render()`를 호출하고 `render()`가 `root.innerHTML` 전체를 교체. 보드의 일부 스크롤만 복원하고 전체 페이지/포커스/드롭다운 상태는 보장하지 못함.
-2. **새 뽑은 타일 끝에 누적**: `engine.js: drawFor()`는 push하지만 `app.js: resetDraft()`의 자동 정렬로 새 타일이 기존 정렬 순서에 합쳐짐. 뽑은 순서대로 맨 끝에 보이도록 수정, 사용자가 정렬 클릭할 때만 전체 정렬.
-3. **AI 손패와 실제 동작 애니메이션**: 관전에서 양쪽 AI 패 가독성 강화, 타일 선택→집기→테이블로 이동/재배열→놓기 및 더미→랙 맨 끝 뽑기. 현재 `spectator.js` 이벤트는 결과의 새 타일 ID만 추적하므로 이동 전후 기록이 필요.
-4. **브라우저 UI E2E**: 스크롤·select 열림·포커스·모바일 터치/랙 순서/애니메이션을 실제 브라우저로 검증. 과한 빛·영문 장식·설명문 추가 금지.
+## 다음 실행
 
-## 연구 다음 단계 — 모두 미구현/미검증
-
-- P0: 공식 2인전 조커/종료 규칙 확정, `FullState` vs `PlayerObservation` 정보 경계 테스트, 합법 행동 생성/적용 API, **동일 계산시간** + 시드 쌍 단위 승률 추정.
-- P1: 전역 Exact Cover/ILP/CP-SAT/B&B 한 턴 솔버와 다양한 합법 후보 생성.
-- P2: 상대 패 belief 샘플링과 ISMCTS / determinization.
-- P3: ExIt, 정책망/가치망, AlphaZero식 PUCT.
-- P4: 2인전 축소 게임에 ReBeL/Deep CFR, MuZero ablation.
-- 모델 개선은 이전 최강 Strategic+ 및 이전 모델들 대비 **독립 시드·좌석 교환·같은 CPU 시간**에서 검증하며, 외부 루미큐브 SOTA는 아직 확인되지 않았다.
-
-## 과거 실험 사실(아직 SOTA 인증 아님)
-
-- Strategic+ vs Strategic v1.1: **200판 127승 73패(63.5%)**, seed 12000~12099, 선후공 교환.
-- Strategic v1.1 vs Greedy: **120판 116승 4패(96.7%)**, seed 6000~6059.
-- Joker Guard vs Greedy: 100판 48승 46패 6무.
-- 위 실험은 동일 계산시간을 보장하지 않음. 결과·소스: [AI_RESEARCH.md](AI_RESEARCH.md) 및 [Actions 로그](https://github.com/oyueo-mm/RummikubAI/actions/runs/45156771597).
-
-## 실행/재현
-
-- `npm test` — Node 내장 테스트 러너 (`package.json` 참고)
-- `npm run benchmark` — 기본 모델 매치업
-- `node bench/matchup.mjs 200 12000 strategic-plus strategic` — 모델 2개/시드/대국 수 지정
-- `python -m http.server 8000` — 로컬 정적 페이지 서빙
-- 수동 장시간 연구: https://github.com/oyueo-mm/RummikubAI/actions/workflows/research.yml
-
-**다음 코딩 작업은 [BACKLOG.md](BACKLOG.md)의 P0 관전·랙 정렬 버그부터 시작할 것.** 완료한 뒤 이 상태 문서를 업데이트하고 실제 브라우저 및 GitHub Pages 결과를 확인한다.
-
-## 2026-11-23 후속 P0 작업 브랜치 (CI/Pages 검증 전)
-
-- 작업 브랜치: `fix/spectator-stability-rack-order-20261123`.
-- 작업 내용: 기본 관전 손패 표시, 물리 ID별 전후 이동·뽑기 로그 및 턴 위치 이동, 관전 DOM 부분 업데이트/타일 FLIP 애니메이션, 명시적 정렬 이후 뽑힌 타일 끝에 유지.
-- **상태:** 구현 커밋을 제출한 뒤 CI를 확인할 것. 실제 브라우저에서 열린 네이티브 select를 포함한 E2E 및 전 구간 타일 이동 애니메이션의 시각적 정확성은 추가 검증 필요. 모든 행동의 세부 선택/집기 단계 연출은 아직 미완성.
-- 연구 단계: 2인전 불완전정보 관측 경계·전역 Exact·ISMCTS/ExIt/PUCT는 여전히 미구현. 기존 승률 기록 갱신 없음.
-
-## 2026-11-23 연구 P0 계측 개선 브랜치 (검증 전)
-
-- `research/player-observation-paired-benchmark-20261123`에서 정책에 전달할 타일 ID 관측 인터페이스를 도입하고 기존 AI의 읽기 경로를 공개 정보·자기 손패로 전환하는 작업 중.
-- 대국 CLI에 시드 쌍 bootstrap 95% 구간과 각 모델의 누적 추론시간/턴당 평균 추론시간을 추가. **시간 예산을 동등하게 강제하는 기능은 아직 없음.**
-- CI 테스트 및 새 실험 로그를 검증 후 현재 상태를 업데이트해야 하며, 성능 향상을 주장하지 않는다.
+[인수인계](NEXT_CHAT.md) → [남은 일](BACKLOG.md) → [로드맵](ROADMAP_2P_SOTA.md). 브라우저 E2E 후 공식 룰과 동등시간 대국 인프라, Global Exact Solver 순으로 진행.
