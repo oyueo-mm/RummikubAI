@@ -1,0 +1,6 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {readFileSync} from 'node:fs';
+const app=readFileSync(new URL('../app.js',import.meta.url),'utf8'),css=readFileSync(new URL('../styles.css',import.meta.url),'utf8');
+test('manual hold is used instead of candidate auto-selection',()=>{assert.ok(app.includes('startManualHold(')&&app.includes('visitManualHold('));assert.equal(app.includes('getHoldOptions('),false);assert.equal(app.includes('showHoldChoices('),false);assert.ok(app.includes("sweptTile("));});
+test('game contains sound toggle and no permanently visible helper labels',()=>{assert.ok(app.includes('data-action="sound"'));assert.ok(app.includes("audio.play('drop')"));for(const label of ['첫 조합을 내려놓으세요','꾹 누르기 · 묶음 이동','남은 더미','내 차례','남은 타일 14개'])assert.equal(app.includes(label),false,'unexpected UI text: '+label);});
+test('flat CSS does not include gradients or glow shadows',()=>{assert.equal(/(?:linear|radial)-gradient|box-shadow|text-shadow|drop-shadow|glow/i.test(css),false);assert.ok(css.includes('--board:#243c68'));});
+test('keyboard undo and AI comparison remain connected',()=>{assert.ok(app.includes("useHistory('undo')"));assert.ok(app.includes("function runBenchmark()"));});
