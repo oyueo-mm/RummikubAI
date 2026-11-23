@@ -1,7 +1,7 @@
 import {candidateTurnPlans} from './belief-search.js';
 /** Lightweight, inspectable policy-imitator bootstrap; not yet the full iterative ExIt loop. */
 export const FEATURE_NAMES=['placedFraction','penaltyReduction','jokerRetention','rackRunLinks','opponentPressure'];
-export const DISTILLED_WEIGHTS=[1.8,.8,.1,.2,.2]; // Initial prior; replace with reproducibly trained weights before claiming learning.
+export const DISTILLED_WEIGHTS=[0.90766081,8.84604151,-1.25310723,-1.43175314,3.49515396]; // Trained with 16 seed games, 14-iteration Belief UCT teacher; CI run 45228856235. Holdout 34 samples: top-1 64.7%.
 export function actionFeatures(observation,action){
   const before=observation.rack.reduce((s,t)=>s+(t.color==='joker'?30:t.value),0);
   const after=action.remaining.reduce((s,t)=>s+(t.color==='joker'?30:t.value),0);
