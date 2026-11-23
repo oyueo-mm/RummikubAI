@@ -20,7 +20,8 @@ jobs:
       - run: node --check bench/matchup.mjs && node bench/matchup.mjs 4 7900 strategic-plus strategic && node bench/matchup.mjs 4 7901 joker-safe exact
       - run: node bench/matchup.mjs 40 10000 strategic-plus strategic && node bench/matchup.mjs 40 10100 joker-safe greedy
       - run: node --check app.js && node --check draft.js && node --check hold.js && node --check sound.js && node --check tile-layout.js && node --check spectator.js && node --check matchup.js && node --check engine.js
-      - run: node --check research/global-cover.js && node --check research/belief-search.js && node --check research/policy.js && node --check bench/train-exit.mjs
-      - run: node bench/train-exit.mjs 4 51000 6
-      - run: node bench/matchup.mjs 4 53000 global-cover strategic-plus && node bench/matchup.mjs 4 53010 belief-uct strategic-plus && node bench/matchup.mjs 4 53020 exit-apprentice strategic-plus
+      - run: node --check research/global-cover.js && node --check research/belief-search.js && node --check research/policy.js && node --check bench/train-exit.mjs && node --check research/alternative-studies.js && node --check bench/alternative-study.mjs
+      - run: node bench/train-exit.mjs 16 51000 14
+      - run: node bench/matchup.mjs 12 53000 global-cover strategic-plus && node bench/matchup.mjs 12 53010 belief-uct strategic-plus && node bench/matchup.mjs 12 53020 exit-apprentice strategic-plus && node bench/matchup.mjs 12 53030 belief-puct strategic-plus
+      - run: node bench/alternative-study.mjs 59000 4
       - run: node scripts/check-site.mjs .
