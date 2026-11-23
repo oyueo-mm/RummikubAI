@@ -1,0 +1,10 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {orderedMeld,canFollow,trailingGroup} from '../tile-layout.js';import {validateMeld} from '../engine.js';
+const t=(id,color,value)=>({id,color,value});
+test('run gets numerically ordered on merge',()=>{const input=[t('r8','red',8),t('r9','red',9),t('r10','red',10),t('r7','red',7)],ordered=orderedMeld(input);assert.deepEqual(ordered.map(x=>x.value),[7,8,9,10]);assert.equal(validateMeld(ordered).valid,true);});
+test('same-number group is canonical by color; all original IDs retained',()=>{const input=[t('black','black',7),t('blue','blue',7),t('red','red',7)];assert.deepEqual(orderedMeld(input).map(x=>x.id),['red','blue','black']);assert.equal(new Set(orderedMeld(input).map(t=>t.id)).size,3);});
+test('incomplete meld is not silently transformed',()=>{const input=[t('r7','red',7),t('r10','red',10)];assert.deepEqual(orderedMeld(input),input);});
+test('hold collects only trailing same-color consecutive tiles on the same row',()=>{const tiles=[t('r6','red',6),t('r7','red',7),t('r8','red',8),t('b8','blue',8),t('r9','red',9),t('r10','red',10)];assert.deepEqual(trailingGroup(tiles,0,7).map(t=>t.id),['r6','r7','r8']);});
+test('hold recognizes an equal-number group of distinct colors',()=>{const tiles=[t('r','red',9),t('b','blue',9),t('k','black',9),t('y','yellow',9),t('r2','red',10)];assert.deepEqual(trailingGroup(tiles,0,7).map(t=>t.id),['r','b','k','y']);});
+test('duplicate color or number interruption stops collection, not skipping behind',()=>{const tiles=[t('a','red',3),t('b','red',3),t('c','red',4),t('d','red',5)];assert.deepEqual(trailingGroup(tiles,0,7).map(t=>t.id),['a']);});
+test('hold does not cross from first rack row into the second row',()=>{const tiles=[t('a','red',6),t('b','red',7),t('c','red',8),t('d','red',9)];assert.deepEqual(trailingGroup(tiles,1,2).map(t=>t.id),['b']);});
+test('joker can bridge a correctly ordered run',()=>{const tiles=[t('r6','red',6),t('j','joker',0),t('r8','red',8)];assert.deepEqual(trailingGroup(tiles,0).map(t=>t.id),['r6','j','r8']);assert.equal(validateMeld(orderedMeld(tiles)).valid,true);});
