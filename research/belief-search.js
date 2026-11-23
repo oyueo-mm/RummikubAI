@@ -1,3 +1,4 @@
+import {actionFeatures} from './policy.js';
 import {buildTiles,seededRandom,cloneBoard,playerObservation,createGame,validateMeld,verifyHumanMove,drawFor,endTurn,takeAiTurn,rackPenalty,candidateMelds} from '../engine.js';
 
 /** Sample from public tile conservation WITHOUT using the original game's RNG seed. */
@@ -61,7 +62,7 @@ export function beliefRootSearch(obs,{method='uct',iterations=10,includeGlobal=t
   const counts=actions.map(()=>0),sums=actions.map(()=>0),scores=actions.map(a=>{
     const saved=a.remaining.filter(t=>t.color==='joker').length;
     const value=a.used/Math.max(1,obs.rack.length)+.04*saved;
-    if(priorWeights&&priorWeights.length>=3)return value*priorWeights[0]+saved*priorWeights[1]+priorWeights[2];
+    if(priorWeights&&priorWeights.length===5)return actionFeatures(obs,a).reduce((sum,f,i)=>sum+f*priorWeights[i],0);
     return 2.5*value;
   }),exp=scores.map(s=>Math.exp(s-Math.max(...scores))),norm=exp.reduce((a,b)=>a+b,0),priors=exp.map(v=>v/norm),random=seededRandom(observationKey(obs));
   for(let i=0;i<iterations;i++){
