@@ -1,0 +1,31 @@
+name: AI Extended Research 2026-11-24
+on:
+  push:
+    branches: [research/extended-2026-11-24]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  reproducible-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - name: Paired 40-game evaluations on untouched seeds
+        run: |
+          mkdir -p results
+          node bench/matchup.mjs 40 81000 global-cover strategic-plus | tee results/global-vs-plus.json
+          node bench/matchup.mjs 40 81100 belief-uct strategic-plus | tee results/uct-vs-plus.json
+          node bench/matchup.mjs 40 81200 belief-puct strategic-plus | tee results/puct-vs-plus.json
+          node bench/matchup.mjs 40 81300 exit-apprentice strategic-plus | tee results/apprentice-vs-plus.json
+          node bench/matchup.mjs 40 81400 belief-puct global-cover | tee results/puct-vs-global.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: extended-ai-research-${{ github.run_id }}
+          path: results/
+          retention-days: 30
