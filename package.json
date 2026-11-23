@@ -4,7 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "benchmark": "node bench/compare.mjs 20 1800",
+    "benchmark": "node bench/matchup.mjs 20 9000 strategic-plus strategic",
+    "benchmark:legacy": "node bench/compare.mjs 20 1800",
     "test": "node --test tests/*.test.js"
   }
 }

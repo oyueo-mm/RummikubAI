@@ -1,0 +1,53 @@
+name: AI Research Benchmark
+on:
+  workflow_dispatch:
+    inputs:
+      model_a:
+        description: First model
+        type: choice
+        options: [strategic-plus, strategic, exact, joker-safe, greedy, random]
+        default: strategic-plus
+        required: true
+      model_b:
+        description: Second model
+        type: choice
+        options: [strategic, strategic-plus, greedy, exact, joker-safe, random]
+        default: strategic
+        required: true
+      games:
+        description: Number of games (paired, even)
+        type: choice
+        options: ['40', '100', '200', '400']
+        default: '200'
+        required: true
+      seed:
+        description: Starting integer seed
+        type: number
+        default: 12000
+        required: true
+permissions:
+  contents: read
+jobs:
+  benchmark:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm test
+      - name: Reproducible paired-seat comparison
+        env:
+          MODEL_A: ${{ inputs.model_a }}
+          MODEL_B: ${{ inputs.model_b }}
+          GAMES: ${{ inputs.games }}
+          SEED: ${{ inputs.seed }}
+        run: |
+          mkdir -p results
+          node bench/matchup.mjs "$GAMES" "$SEED" "$MODEL_A" "$MODEL_B" | tee results/matchup.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ai-matchup-${{ github.run_id }}
+          path: results/matchup.json
+          retention-days: 30

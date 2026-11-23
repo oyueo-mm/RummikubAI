@@ -2,8 +2,8 @@
 
 - 저장소: https://github.com/oyueo-mm/RummikubAI
 - 배포: https://oyueo-mm.github.io/RummikubAI/
-- 검증 PR: https://github.com/oyueo-mm/RummikubAI/pull/5
-- **검증 시점: 2026-11-23, PR CI 성공(57 tests), main 병합/Pages 최종 배포 확인 전**
+- 진행 PR: https://github.com/oyueo-mm/RummikubAI/pull/6
+- **기록 시점: 2026-11-23, v0.7 PR CI 테스트 75개 통과, main 병합·Pages 배포 전**
 
 ## 현재 코드 범위
 
@@ -14,7 +14,9 @@
 - 길게 누른 타일부터 **뒤쪽의 물리적으로 인접한 유효한 조합**을 함께 선택
 - 조합에 추가한 타일은 완성된 합법 조합일 때 자동 정렬
 - 사운드와 음소거; 장식적 빛 효과가 없는 단색 UI
-- Random / Greedy / 탐색 AI v1 (제한된 테이블 정확 재배열)
+- Random / Greedy / Joker Guard / Exact Small / Strategic v1.1 / Strategic+ v1, 총 **6개 실제 전략 구현**
+- AI 대국 관전: 모델 2개 선택, 재생/일시정지, 한 턴 진행, 0.5~8배 속도, 동일 시드 다시 보기, 새 시드, 양쪽 손패 보기
+- AI 비교: 임의 2개 모델의 동일 시드·자리 교환 대국, 20/40/100판 및 시드 변경, 중지·진행 결과 표시
 - 20판 자동 비교 도구 (탐색 vs Greedy, 시드·자리 교환)
 
 ## 알려진 한계 및 다음 작업
@@ -24,8 +26,8 @@
 - 국소 Exact Cover는 최대 **16개 후보 문제**, 부분집합당 **15개 타일**까지만 탐색. 전역 최적 솔버는 아님
 - 정보집합 MCTS·상대 손패 추론·정책 학습 미구현
 - 일부 조커 회수/변형 규칙과 3~4인 대전 미구현
-- 장시간 독립 시드 벤치마크와 신뢰구간 분석 필요
+- 다른 강한 모델 대비 독립 벤치마크, 동일 계산 시간 기준과 승률 신뢰구간 분석 필요
 
 ## 검증
 
-단위 테스트는 `tests/`에 위치. 2026-11-23 PR CI에서 **57/57 통과** 및 파일 의존성 검사 성공. 전략 AI의 40+120판 재현 결과는 `AI_RESEARCH.md` 참조. GitHub Pages 배포는 `main` 병합 이후 별도 확인.
+단위 테스트는 `tests/`에 위치. v0.6에서는 57/57 테스트 및 파일 의존성 검사를 통과했다. v0.7 PR CI에서 **75/75 테스트 통과**, 정적 의존성 **10개 파일 검증**, 200판 Strategic+ vs Strategic v1.1 **127승/73패** 관측. 장시간 결과는 `AI_RESEARCH.md`, 배포 여부는 GitHub Pages 워크플로 기록 참조. 이전 전략 AI의 40+120판 결과는 `AI_RESEARCH.md` 참조.
