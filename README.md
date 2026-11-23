@@ -4,9 +4,18 @@
 
 [웹에서 플레이](https://oyueo-mm.github.io/RummikubAI/) · [Actions 테스트](https://github.com/oyueo-mm/RummikubAI/actions) · [GitHub](https://github.com/oyueo-mm/RummikubAI)
 
-> **새 채팅/개발 세션 인수인계:** [`.context/NEXT_CHAT.md`](.context/NEXT_CHAT.md)부터 읽으세요. [현재 우선순위](.context/BACKLOG.md) · [2인전 SOTA 연구 계획](.context/ROADMAP_2P_SOTA.md). **관전 애니메이션, 스크롤·드롭다운 유지, 뽑은 타일의 순서 보존은 아직 개발 예정**입니다. 아래 과거 버전 설명은 변경 이력이며 현재 요구사항과 다를 수 있습니다.
+> **개발 인수인계:** [.context/NEXT_CHAT.md](.context/NEXT_CHAT.md) · [현재 상태](.context/STATUS.md) · [2인전 SOTA 로드맵](.context/ROADMAP_2P_SOTA.md) · [새 연구 실험](.context/RESEARCH_PHASES.md). 관전 부분 갱신·뽑기 순서 보존은 코드 수준에서 반영했지만 실브라우저 E2E 검증은 아직 미완료입니다.
 
-## v0.7 — AI 대국 관전 · 6개 모델 · 공정 비교
+## v0.8 연구 프로토타입 — 10개 AI 모델 (2026-11-24)
+
+- 새 AI: **Global Cover β**, **Belief UCT β**, **Belief PUCT β**, **Apprentice β**. 기존 6종은 유지.
+- Global Cover는 공개 게임판 전체 타일 보존 조건으로 제한 B&B 탐색을 시행하며, 한도 초과 때는 국소 탐색으로 폴백합니다.
+- Belief UCT/PUCT는 관측 정보만으로 숨겨진 타일 배치를 표본화하는 **루트 정보집합 탐색 초기형**입니다. 완전 ISMCTS/POMCP는 아닙니다.
+- Apprentice는 독립 시드에서 탐색 교사 행동을 모방한 **단일 정책 증류 실험 모델**입니다. 전체 ExIt 자기대국 반복·가치망은 미구현입니다.
+- Deep CFR/ReBeL/MuZero 계열은 [축소게임·전이 예측 진단 코드](.context/RESEARCH_PHASES.md)만 연구용으로 추가했습니다. 완성된 AI라는 표시를 하지 않습니다.
+- 재현: `node bench/matchup.mjs 40 81000 global-cover strategic-plus`, `node bench/train-exit.mjs 16 51000 14`, `node bench/alternative-study.mjs 59000 4`.
+
+## v0.7 — 기존 6개 모델과 관전 기능 (과거 버전 설명)
 
 - **AI 대국 관전**: 홈의 세 번째 선택지 또는 상단 탭에서 두 모델을 골라 대국 관전. 재생/일시정지, 한 턴씩 진행, 0.5–8배속, 동일 시드 다시 보기, 새로운 시드, 양쪽 손패 보기.
 - **모델 6종**: Random, Greedy, Joker Guard(조커 사용 절제), Exact Small(최대 15개 타일에서 전체 보드 재배열), Strategic v1.1(국소 정확 탐색 16문제), Strategic+ v1(국소 탐색 48문제).

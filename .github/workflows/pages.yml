@@ -33,6 +33,8 @@ jobs:
         run: |
           mkdir -p site
           cp index.html app.js engine.js draft.js hold.js tile-layout.js spectator.js matchup.js sound.js styles.css site/
+          mkdir -p site/research
+          cp research/*.js site/research/
           node scripts/check-site.mjs site
       - uses: actions/upload-pages-artifact@v3
         with:

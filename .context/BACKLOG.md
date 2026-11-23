@@ -1,16 +1,24 @@
-# RummikubAI — 현재 백로그 (2026-11-23)
+# RummikubAI — 현재 백로그 (2026-11-24)
 
 > [최신 인수인계](NEXT_CHAT.md)와 [상태](STATUS.md)를 참조. 아래 체크 표시는 구현 코드·CI 수준이며 실브라우저 E2E가 필요하면 별도 미완료로 남긴다.
 
 ## 구현·기본 CI 검증 완료
 
-- [x] 106개 물리 타일, 첫 등록 30점, 기본 2인전, 로컬 인간 2인, 6종 AI, 비교·관전·시드 재현.
+- [x] 106개 물리 타일, 첫 등록 30점, 기본 2인전, 로컬 인간 2인, 10종 AI, 비교·관전·시드 재현.
 - [x] 관전 전체 DOM 교체 최소화·선택 컨트롤 노드 보존형 부분 갱신 (실브라우저 E2E 별도).
 - [x] 새 뽑은 타일 끝에 추가, 사용자 재정렬/수동 정렬 순서 보존, 턴 경계 강제 자동 정렬 금지.
 - [x] 양쪽 관전 AI 손패 기본 공개·큰 타일, 물리 ID별 보드/랙 이벤트·뽑기 기록·FLIP 애니메이션 초안, 턴별 기록/seek.
 - [x] PlayerObservation 읽기 경계, 내부 불변 스냅샷 및 기본 비공개 테스트.
 - [x] 시드 쌍 paired bootstrap 95% CI, 양쪽 AI 턴별 계산시간 계측 및 원시 시드 결과 출력.
 - [x] [PR #7](https://github.com/oyueo-mm/RummikubAI/pull/7) 및 [PR #8](https://github.com/oyueo-mm/RummikubAI/pull/8) CI/Pages 성공 확인.
+
+## 2026-11-24 연구 완료(부분 기능에 한정)
+
+- [x] 전역 물리 보드 타일 전부를 대상으로 하는 B&B 후보 생성 실험 — 38개 타일/노드/분기 제한이 있으므로 증명된 최적 솔버 아님.
+- [x] 관측에서 시드 제거, 자기 손패·공개 보드 외 숨은 패를 새로 표본 추출하는 belief sampler와 root UCT/PUCT 초기형. 106타일 보존·합법 행동 자동 테스트.
+- [x] 1차 ExIt 교사 행동 모방 학습 스크립트, 독립 홀드아웃 검증, 학습 가중치 정책 적용. 반복 자기대국·신경망은 미완료.
+- [x] Deep CFR/ReBeL 정상형 축소 regret 분석과 MuZero 선행단계 단일 전이 예측 진단. **완전 알고리즘 구현 아님.**
+- [x] [연구 보고서](RESEARCH_PHASES.md)와 [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9).
 
 ## P0 — 남은 인터페이스·엔진 신뢰성
 
@@ -29,14 +37,16 @@
 
 ## P2 — 정보집합 게임 탐색
 
-- [ ] 공개 이력과 타일 보존에 일관된 belief sampling 및 determinization.
+- [x] 공개 손패/보드와 106타일 보존 기반 단순 belief sampling 및 determinization. (과거 플레이 이력의 추론 제약은 미완료)
 - [ ] ISMCTS/POMCP 정보집합별 탐색과 rollout/행동 추상화 ablation.
 - [ ] 동일시간 Strategic+ 대비 독립 시드 승률/구간 비교.
 
 ## P3–P4 — 자기대국과 대안 연구
 
-- [ ] Expert Iteration + 정책·가치망/증류/self-play 및 belief-aware PUCT.
-- [ ] Deep CFR, ReBeL, MuZero의 축소 게임 ablation 및 자원 대비 효과 검증.
+- [x] 단일 라운드 정책 증류 부트스트랩 + belief root PUCT 프로토타입.
+- [ ] ExIt 반복 자기대국, 가치/정책 신경망 학습 및 완전 PUCT.
+- [x] CFR 유사 정상형 regret matching · public-belief 행렬 및 learned dynamics 대리 검증.
+- [ ] 실제 Deep CFR(신경망 regret), ReBeL(재귀적 공통신념), MuZero(잠재 전이+트리 탐색) 축소 게임과 실전 성능 비교.
 
 ## 완료 판정
 
