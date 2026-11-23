@@ -5,13 +5,13 @@ on:
       model_a:
         description: First model
         type: choice
-        options: [strategic-plus, strategic, exact, joker-safe, greedy, random]
+        options: [strategic-plus, global-cover, belief-uct, belief-puct, exit-apprentice, strategic, exact, joker-safe, greedy, random]
         default: strategic-plus
         required: true
       model_b:
         description: Second model
         type: choice
-        options: [strategic, strategic-plus, greedy, exact, joker-safe, random]
+        options: [strategic, strategic-plus, global-cover, belief-uct, belief-puct, exit-apprentice, greedy, exact, joker-safe, random]
         default: strategic
         required: true
       games:
