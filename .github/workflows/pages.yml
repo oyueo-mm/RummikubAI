@@ -22,12 +22,13 @@ jobs:
           node --check engine.js
           node --check app.js
           node --check draft.js
+          node --check hold.js
           npm test
       - uses: actions/configure-pages@v5
       - name: Prepare publish directory
         run: |
           mkdir -p site
-          cp index.html app.js engine.js draft.js styles.css site/
+          cp index.html app.js engine.js draft.js hold.js styles.css site/
           node scripts/check-site.mjs site
       - uses: actions/upload-pages-artifact@v3
         with:
