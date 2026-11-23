@@ -1,4 +1,3 @@
-/** Manual long-press sweep selection: no auto-discovered melds or hidden tile information. */
-export function startManualHold(tileId,availableIds){const allowed=new Set(availableIds);if(!allowed.has(tileId))return null;return{anchor:tileId,ids:[tileId],lastHit:tileId};}
-export function visitManualHold(hold,tileId,availableIds){if(!hold)return{hold:null,change:null};const available=new Set(availableIds);if(tileId===hold.lastHit)return{hold,change:null};if(!tileId||!available.has(tileId))return{hold:{...hold,lastHit:null},change:null};const ids=hold.ids.slice();if(tileId===hold.anchor)return{hold:{...hold,lastHit:tileId},change:null};const index=ids.indexOf(tileId);let change=null;if(index>=0){ids.splice(index,1);change='remove';}else{ids.push(tileId);change='add';}return{hold:{...hold,ids,lastHit:tileId},change};}
-export function finishManualHold(hold){return hold?.ids.slice()||[];}
+import {trailingGroup} from './tile-layout.js';
+/** Only tiles immediately following the held tile, in the current visual order. */
+export function collectHold(state,tileId,zone,columns=7){if(zone==='rack'){const idx=state.rack.findIndex(t=>t.id===tileId);return trailingGroup(state.rack,idx,Math.max(1,columns)).map(t=>t.id);}const meld=state.board.find(group=>group.tiles.some(t=>t.id===tileId));if(!meld)return[];return trailingGroup(meld.tiles,meld.tiles.findIndex(t=>t.id===tileId)).map(t=>t.id);}

@@ -16,5 +16,6 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
-      - run: node --check app.js && node --check draft.js && node --check hold.js && node --check sound.js && node --check engine.js
+      - run: node --check bench/compare.mjs && node bench/compare.mjs 40 1800 && node bench/compare.mjs 120 6000
+      - run: node --check app.js && node --check draft.js && node --check hold.js && node --check sound.js && node --check tile-layout.js && node --check engine.js
       - run: node scripts/check-site.mjs .
