@@ -1,10 +1,10 @@
 import {AI_MODELS,simulateMatch} from '../engine.js';
-import {matchupPlayers,matchupSeed,matchupWinner} from '../matchup.js';
+import {matchupPlayers,matchupSeed,matchupWinner,pairedBootstrapCI} from '../matchup.js';
 const [countArg='20',seedArg='9000',modelA='strategic-plus',modelB='strategic']=process.argv.slice(2);
 const games=Number(countArg),seed=Number(seedArg),names=new Set(AI_MODELS.map(m=>m.id));
 if(!Number.isSafeInteger(games)||games<2||games>10000||games%2||!Number.isSafeInteger(seed)||seed<0||!names.has(modelA)||!names.has(modelB))throw Error('Usage: node bench/matchup.mjs <even games 2..10000> <seed> <modelA> <modelB>');
-const results={modelA,modelB,games,seed,winsA:0,winsB:0,draws:0,capped:0,totalTurns:0,elapsedMs:0};
+const results={modelA,modelB,games,seed,winsA:0,winsB:0,draws:0,capped:0,totalTurns:0,elapsedMs:0,computeMsA:0,computeMsB:0,decisionCountA:0,decisionCountB:0,pairedSeeds:games/2,pairs:[],equalTimeBudget:false};
 const started=performance.now();
-for(let i=0;i<games;i++){const models=matchupPlayers(modelA,modelB,i),game=simulateMatch(matchupSeed(seed,i),models,180),winner=matchupWinner(game.winner,i);if(winner==='draw')results.draws++;else if(winner==='a')results.winsA++;else results.winsB++;if(game.capped)results.capped++;results.totalTurns+=game.turns;}
-results.elapsedMs=Math.round(performance.now()-started);results.scoreA=(results.winsA+.5*results.draws)/games;results.avgTurns=results.totalTurns/games;
+for(let i=0;i<games;i++){const models=matchupPlayers(modelA,modelB,i),actualSeed=matchupSeed(seed,i),game=simulateMatch(actualSeed,models,180),winner=matchupWinner(game.winner,i),aSeat=i%2,bSeat=1-aSeat;if(winner==='draw')results.draws++;else if(winner==='a')results.winsA++;else results.winsB++;if(game.capped)results.capped++;results.totalTurns+=game.turns;results.computeMsA+=game.computeMsBySeat[aSeat];results.computeMsB+=game.computeMsBySeat[bSeat];results.decisionCountA+=game.turnsBySeat[aSeat];results.decisionCountB+=game.turnsBySeat[bSeat];if(i%2===0)results.pairs.push({seed:actualSeed,scoreA:0,games:[]});const pair=results.pairs[results.pairs.length-1];pair.games.push({aSeat,winner,turns:game.turns,capped:game.capped,computeMsA:game.computeMsBySeat[aSeat],computeMsB:game.computeMsBySeat[bSeat]});pair.scoreA+=(winner==='a'?1:winner==='draw'?.5:0)/2;}
+results.elapsedMs=Math.round(performance.now()-started);results.scoreA=(results.winsA+.5*results.draws)/games;results.avgTurns=results.totalTurns/games;results.avgDecisionMsA=results.computeMsA/Math.max(1,results.decisionCountA);results.avgDecisionMsB=results.computeMsB/Math.max(1,results.decisionCountB);results.pairedBootstrap95=pairedBootstrapCI(results.pairs.map(p=>p.scoreA),2000,seed+8317);
 console.log(JSON.stringify(results,null,2));

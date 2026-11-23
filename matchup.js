@@ -2,3 +2,6 @@
 export function matchupPlayers(a,b,gameIndex){if(!Number.isSafeInteger(gameIndex)||gameIndex<0)throw Error('Invalid game index');return gameIndex%2===0?[a,b]:[b,a];}
 export function matchupSeed(baseSeed,gameIndex){if(!Number.isSafeInteger(baseSeed)||!Number.isSafeInteger(gameIndex)||baseSeed<0||gameIndex<0)throw Error('Invalid matchup seed');return baseSeed+Math.floor(gameIndex/2);}
 export function matchupWinner(winner,gameIndex){if(winner===null)return'draw';if(winner!==0&&winner!==1)throw Error('Invalid winner seat');return winner===gameIndex%2?'a':'b';}
+
+/** Seed-pair bootstrap: each unit is the mean result of two seat-swapped games. */
+export function pairedBootstrapCI(pairScores,repetitions=2000,seed=20261123){if(!Array.isArray(pairScores)||!pairScores.length||pairScores.some(x=>!Number.isFinite(x)||x<0||x>1)||!Number.isSafeInteger(repetitions)||repetitions<100)throw Error('Invalid paired bootstrap input');let state=(seed>>>0)||0x9e3779b9;const random=()=>{state^=state<<13;state^=state>>>17;state^=state<<5;return(state>>>0)/4294967296;},samples=[],n=pairScores.length;for(let b=0;b<repetitions;b++){let sum=0;for(let i=0;i<n;i++)sum+=pairScores[Math.floor(random()*n)];samples.push(sum/n);}samples.sort((a,b)=>a-b);return{lower:samples[Math.floor((repetitions-1)*.025)],upper:samples[Math.ceil((repetitions-1)*.975)],pairs:n,repetitions};}
