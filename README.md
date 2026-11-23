@@ -4,6 +4,8 @@
 
 [웹에서 플레이](https://oyueo-mm.github.io/RummikubAI/) · [Actions 테스트](https://github.com/oyueo-mm/RummikubAI/actions) · [GitHub](https://github.com/oyueo-mm/RummikubAI)
 
+> **새 채팅/개발 세션 인수인계:** [`.context/NEXT_CHAT.md`](.context/NEXT_CHAT.md)부터 읽으세요. [현재 우선순위](.context/BACKLOG.md) · [2인전 SOTA 연구 계획](.context/ROADMAP_2P_SOTA.md). **관전 애니메이션, 스크롤·드롭다운 유지, 뽑은 타일의 순서 보존은 아직 개발 예정**입니다. 아래 과거 버전 설명은 변경 이력이며 현재 요구사항과 다를 수 있습니다.
+
 ## v0.7 — AI 대국 관전 · 6개 모델 · 공정 비교
 
 - **AI 대국 관전**: 홈의 세 번째 선택지 또는 상단 탭에서 두 모델을 골라 대국 관전. 재생/일시정지, 한 턴씩 진행, 0.5–8배속, 동일 시드 다시 보기, 새로운 시드, 양쪽 손패 보기.
