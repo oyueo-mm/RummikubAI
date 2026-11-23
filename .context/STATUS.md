@@ -55,3 +55,10 @@
 - 수동 장시간 연구: https://github.com/oyueo-mm/RummikubAI/actions/workflows/research.yml
 
 **다음 코딩 작업은 [BACKLOG.md](BACKLOG.md)의 P0 관전·랙 정렬 버그부터 시작할 것.** 완료한 뒤 이 상태 문서를 업데이트하고 실제 브라우저 및 GitHub Pages 결과를 확인한다.
+
+## 2026-11-23 후속 P0 작업 브랜치 (CI/Pages 검증 전)
+
+- 작업 브랜치: `fix/spectator-stability-rack-order-20261123`.
+- 작업 내용: 기본 관전 손패 표시, 물리 ID별 전후 이동·뽑기 로그 및 턴 위치 이동, 관전 DOM 부분 업데이트/타일 FLIP 애니메이션, 명시적 정렬 이후 뽑힌 타일 끝에 유지.
+- **상태:** 구현 커밋을 제출한 뒤 CI를 확인할 것. 실제 브라우저에서 열린 네이티브 select를 포함한 E2E 및 전 구간 타일 이동 애니메이션의 시각적 정확성은 추가 검증 필요. 모든 행동의 세부 선택/집기 단계 연출은 아직 미완성.
+- 연구 단계: 2인전 불완전정보 관측 경계·전역 Exact·ISMCTS/ExIt/PUCT는 여전히 미구현. 기존 승률 기록 갱신 없음.
