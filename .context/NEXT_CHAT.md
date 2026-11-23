@@ -2,6 +2,13 @@
 
 > **최신 PR #9 연구 변경을 먼저 확인한다.** 2026-11-23 문단은 과거 이력이며 이 섹션이 우선이다.
 
+## 2026-11-24 — PR #9 병합·배포 및 독립 실험 확인
+
+- [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9) **main 병합 완료** (`008ef7a1`). [Pages 성공](https://github.com/oyueo-mm/RummikubAI/actions/runs/45230449969). main 배포 URL https://oyueo-mm.github.io/RummikubAI/.
+- [독립 실험 40판×5조합 성공](https://github.com/oyueo-mm/RummikubAI/actions/runs/45229516628): Global Cover vs Strategic+ **22:18 (55.0%)**, Belief UCT(24회) **22:18 (55.0%)**, Belief PUCT(20회, trained prior) **19:21 (47.5%)**, Apprentice(trained) **19:21 (47.5%)**. Belief PUCT vs Global Cover **15:25 (37.5%)**. 모든 조합마다 다른 독립 시험 시드; 각 20 시드쌍, 자리 교환.
+- Global Cover vs Strategic+ 95% seed-pair CI **[45%,65%]**, UCT **[37.5%,72.5%]**. 두 구간 모두 50% 포함, **성능 우월 입증 불가**. 동일 시간 예산 미강제. 기본 AI는 Strategic+ 유지.
+- 완전한 방법론 구현 수준과 정량 결과는 [AI_RESEARCH.md](AI_RESEARCH.md) 및 [RESEARCH_PHASES.md](RESEARCH_PHASES.md) 참고.
+
 ## 2026-11-24 — 5계열 연구 작업
 
 - [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9)에 **Global Cover β, Belief UCT β, Belief PUCT β, Apprentice β** 4개 모델을 추가해 합계 **10개**. [연구별 구현 수준](RESEARCH_PHASES.md) 참조.
@@ -9,8 +16,8 @@
 - **관측에서 원본 seed를 제거**하여 같은 seed로 실제 상대 손패를 역산하지 못하도록 수정. 새로운 연구 행동은 실제 엔진의 합법성 검사 재통과.
 - policy 계수는 [CI 45228856235](https://github.com/oyueo-mm/RummikubAI/actions/runs/45228856235)의 독립 시드 학습/검증을 거쳐 업데이트. 16개 학습 게임/6개 홀드아웃 게임, 다중 행동 샘플 89/34개, 홀드아웃 교사 행동 일치율 64.7%. 승률 증명이 아님.
 - Deep CFR/ReBeL은 축소된 공개신념 payoff matrix와 regret matching만, MuZero는 단일 다음상태 대리 예측 모델만 구현. **완전 Deep CFR/ReBeL/MuZero는 미구현**.
-- Pages 배포는 research/*.js도 함께 복사하도록 workflow 수정. PR 병합 후 실제 Pages 성공 여부 확인 필수.
-- 초기 실험 12판에서 Global 8-4, Belief UCT v1(8 rollout) 1-11, Apprentice(학습 전 prior) 6-6, Belief PUCT(학습 전 prior) 8-4 vs Strategic+. **현재 UCT 24회/PUCT 20회·학습된 prior로 변경하여 해당 이전 수치와 버전을 구분해야 함.** 향후 독립 40판 실험 링크를 추가.
+- Pages workflow는 research/*.js 복사를 포함하도록 수정, PR #9 병합 후 실제 Pages 성공 확인(상단 링크).
+- 초기 12판 실험은 구형 UCT/PUCT와 학습 전 가중치의 과거 기록임. 상단 새 40판 독립 실험 결과를 우선 참고.
 
 > 다음 채팅에서는 이 문서를 먼저 읽고, 이후 `STATUS.md`, `BACKLOG.md`, `ROADMAP_2P_SOTA.md`, `AI_RESEARCH.md`, `DECISIONS.md`, `AGENTS.md`를 확인한다. 19:53 이전의 상태·체크리스트 서술과 충돌하면 **아래 검증 완료 상태**를 우선한다.
 

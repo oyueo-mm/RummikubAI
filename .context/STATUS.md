@@ -1,11 +1,17 @@
 # RummikubAI — 최신 구현·연구 상태 (2026-11-24)
 
+## 2026-11-24 연구 PR #9 병합·배포 완료
+
+- [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9) **main 병합** (`008ef7a1`), [Pages 배포 성공](https://github.com/oyueo-mm/RummikubAI/actions/runs/45230449969).
+- [연구 브랜치 독립 40판×5조합 성공](https://github.com/oyueo-mm/RummikubAI/actions/runs/45229516628). Global Cover/Belief UCT 각 Strategic+ 상대 22-18, 55%. 95% CI 각각 [45%,65%], [37.5%,72.5%]로 50% 포함; **강화 입증은 아직 아님.** 나머지 정확한 수치 [AI_RESEARCH.md](AI_RESEARCH.md) 참조.
+- **기본 모델 Strategic+ 유지**, 원본 seed 누출 수정 및 10개 AI 선택 지원. 신경망 Deep CFR/ReBeL/MuZero는 미구현.
+
 ## 2026-11-24 연구 PR #9 진행
 
 - [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9): 4개 연구 프로토타입, 학습/검증 스크립트, P4 대안 진단, 원본 seed 관측 누출 방지, GitHub Pages 연구 파일 포함.
-- [CI 및 12판 탐색적 대국](https://github.com/oyueo-mm/RummikubAI/actions/runs/45228856235) 성공. 모델 4종을 새로 추가해 전체 **10종**. 학습 후 prior와 UCT 24/PUCT 20회 버전의 승률은 별도 비교 필요.
+- [CI 및 12판 탐색적 대국](https://github.com/oyueo-mm/RummikubAI/actions/runs/45228856235) 성공. 모델 4종을 새로 추가해 전체 **10종**. 학습 후 prior와 UCT 24/PUCT 20회 버전의 승률은 상단 독립 40판 평가를 참조.
 - 모델 구현 수준은 [RESEARCH_PHASES.md](RESEARCH_PHASES.md)를 따른다. 완전 다층 ISMCTS/ExIt/Deep CFR/ReBeL/MuZero의 구현·성능 우월성 주장 금지.
-- 이 문서의 아래 PR #7/#8 배포 증거는 이전 main 기준. **PR #9는 병합 및 새 Pages 결과가 확인된 후에만 완료/배포로 표기**.
+- 아래 PR #7/#8 링크는 과거 배포 증거이며 PR #9의 최신 main 배포는 상단 Pages 성공 링크 참조.
 
 ## 최신 완료·배포 증거
 

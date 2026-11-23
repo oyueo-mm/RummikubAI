@@ -18,7 +18,8 @@
 - [x] 관측에서 시드 제거, 자기 손패·공개 보드 외 숨은 패를 새로 표본 추출하는 belief sampler와 root UCT/PUCT 초기형. 106타일 보존·합법 행동 자동 테스트.
 - [x] 1차 ExIt 교사 행동 모방 학습 스크립트, 독립 홀드아웃 검증, 학습 가중치 정책 적용. 반복 자기대국·신경망은 미완료.
 - [x] Deep CFR/ReBeL 정상형 축소 regret 분석과 MuZero 선행단계 단일 전이 예측 진단. **완전 알고리즘 구현 아님.**
-- [x] [연구 보고서](RESEARCH_PHASES.md)와 [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9).
+- [x] [연구 보고서](RESEARCH_PHASES.md)와 [PR #9](https://github.com/oyueo-mm/RummikubAI/pull/9) main 병합 및 [Pages 배포 성공](https://github.com/oyueo-mm/RummikubAI/actions/runs/45230449969).
+- [x] 신규 4종 모두 Strategic+ 상대 독립 40판×4조합 + PUCT vs Global 40판, 95% seed-pair bootstrap 및 턴 ms 측정. [로그](https://github.com/oyueo-mm/RummikubAI/actions/runs/45229516628); 우월성 입증에는 아직 불충분.
 
 ## P0 — 남은 인터페이스·엔진 신뢰성
 
